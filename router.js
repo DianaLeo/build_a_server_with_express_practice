@@ -63,12 +63,24 @@ router.put('/tasks/:id', (req, res) => {
 //4. create a new task
 router.post('/tasks', (req, res) => {
     const newTask = req.body;
-    tasks.push(newTask);
-    res.status(201).send({
-        msg: "Successfully posted",
-        posted: newTask,
-        tasks: tasks
+    const id = req.body.id;
+    const index = tasks.findIndex((task) => {
+        return task.id === id
     });
+    if (index == -1) {
+        tasks.push(newTask);
+        res.status(201).send({
+            msg: "Successfully posted",
+            posted: newTask,
+            tasks: tasks
+        });
+    }else{
+        res.status(202).send({
+            msg: `Sorry, there is already a task for id:${id}`
+        })
+    }
+
+
 })
 
 //5. delete task by id
